@@ -207,185 +207,146 @@ X=1, Y=2
 
 ```prolog
 DOMAINS
-	conditions = number*
-	number = integer
-	category = string
-
-DATABASE
-	topic(category)
-	rule(number, category, category, conditions)
-	cond(number, category)
-	yes(number)
-	no(number)
-
+	DOMAINS 
+  conditions = number*
+  number = integer
+  category = string
+  
+global facts - pravila
+  topic(category)
+  rule(number, category, category, conditions)
+  cond(number, category)
+  yes(number)
+  no(number)
+  
 PREDICATES
-	do_expert_job
-	nondeterm show_menu
-	nondeterm do_consulting
-	nondeterm process(integer)
-	info(category)
-	goes(category)
-	listopt
-	clear
-	eval_reply(char)
-	nondeterm go(category)
-	nondeterm check(number, conditions)
-	inpo(number, number, string)
-	do_answer(number, string, number, number)
-	
-CLAUSES
-	topic("washer").
-	topic("frontal").
-	topic("frontal-tight").
-	topic("frontal-wide").
-	topic("frontal-tight-with-drying").
-	topic("frontal-wide-with-drying").
-	topic("frontal-tight-without-drying").
-	topic("frontal-wide-without-drying").
-	topic("vertical-tight").
-	topic("vertical-tight-with-drying").
-	topic("vertical-tight-without-drying").
-
-	rule(1, "washer", "frontal", [1]).
-	rule(2, "washer", "vertical-tight", [2, 3]).
-	rule(3, "frontal", "frontal-tight", [3]).
-	rule(4, "frontal", "frontal-wide", [4]).
-	rule(5, "vertical-tight", "vertical-tight-with-drying", [5]).
-	rule(6, "vertical-tight", "vertical-tight-without-drying", [6]).
-	rule(7, "frontal-tight", "frontal-tight-with-drying", [5]).
-	rule(8, "frontal-tight", "frontal-tight-without-drying", [6]).
-	rule(9, "frontal-wide", "frontal-wide-with-drying", [5]).
-	rule(10, "frontal-wide", "frontal-wide-without-drying", [6]).
-	rule(11, "frontal-tight-with-drying", "Haier HW60-BP10929A", [8, 9, 13]).
-	rule(12, "frontal-tight-with-drying", "Samsung WW65J42E02W", [8, 9, 13]).
-	rule(13, "frontal-tight-with-drying", "Samsung WW80R52LCFW", [8, 11, 13]).
-	rule(14, "frontal-tight-with-drying", "Samsung WW70J52E02W ", [8, 10, 13]).
-	rule(15, "frontal-tight-without-drying", "LG F2T3HS6W", [8, 10, 13]).
-	rule(16, "frontal-tight-without-drying", "Haier HW60-BP10959A", [8, 9, 13]).
-	rule(17, "frontal-tight-without-drying", "Bosch Serie | 4 PerfectCare WHA122XMOE", [8, 10, 14]).
-	rule(18, "frontal-tight-without-drying", "Indesit BWSA 51051 S", [8, 9, 13]).
-	rule(19, "frontal-wide-with-drying", "LG F2V5HG0W", [7, 10, 14]).
-	rule(20, "frontal-wide-with-drying", "LG AIDD F4V5VS0W", [7, 11, 14]).
-	rule(21, "frontal-wide-with-drying", "LG F4H5VS6W", [7, 11, 14]).
-	rule(22, "frontal-wide-with-drying", "Samsung WW90M74LNOA", [7, 11, 15])
-	rule(23, "frontal-wide-without-drying", "Bosch Serie | 6 WAT24442OE", [8, 11, 14]).
-	rule(24, "frontal-wide-without-drying", "Whirlpool FSCR 90420", [8, 11, 14]).
-	rule(25, "frontal-wide-without-drying", "Bosch Serie | 4 WGA242X5OE", [8, 11, 15]).
-	rule(26, "frontal-wide-without-drying", "Samsung WW90J5446F", [8, 11, 14]).
-	rule(27, "frontal-wide-without-drying", "LG F1K2CH2T", [8, 12, 15]).
-	rule(28, "vertical-tight-with-drying", "Haier RTXS G382TM/1-07", [7, 11, 14]).
-	rule(29, "vertical-tight-without-drying", "Indesit MTW A51051", [8, 9, 13]).
-	rule(30, "vertical-tight-without-drying", "Whirlpool AWE 6080", [8, 9, 13]).
-
-	cond(1, "is frontal").
-	cond(2, "is vertical").
-	cond(3, "is tight").
-	cond(4, "is wigth").
-	cond(5, "with drying").
-	cond(6, "without drying").
-	cond(7, "with steam wash").
-	cond(8, "without steam wash").
-	cond(9, "maximum load less then 7").
-	cond(10, "maximum load in [7, 8)").
-	cond(11, "maximum load in [8, 9]").
-	cond(12, "maximum load more then 9").
-	cond(13, "cost less or equal then 30000").
-	cond(14, "cost in [30000, 50000]").
-	cond(15, "cost more then 50000").
-
-	do_expert_job:-
-		show_menu, nl,
-		write("Press any key"),
-		readchar(_), exit.
-
-	show_menu:-
-		write("-> 1 - consultation"), nl,
-		write("-> 2 - exit"), nl,
-		readint(Choice), process(Choice).
-		
-	process(1):-
-		do_consulting.
-
-	process(2):-
-		exit.
-
-	do_consulting:-
-		goes(Mygoal),
-		go(Mygoal), !.
-
-	do_consulting:-
-		nl, write("I cant help you").
-		do_consulting.
-
-	goes(MyGoal):-
-		clear, nl,
-		write("To start enter 'washer'"), nl,
-		write("If you want to see the washers types, enter '?'"), nl,
-		readln(Mygoal), info(Mygoal), !.
-
-	info("?"):-
-		!, listopt, nl,
-		exit.
-		info("washer").
-
-	listopt:-
-		write("Washers types are: "), nl,
-		topic(Washer),
-		write("->",Washer), nl, fail.
-		listopt.
-
-	inpo(Rno, Bno, Text):-
-		write("Question:- ", Text, "?"),nl,
-		write("\tType 1 for 'yes': "), nl,
-		write("\tType 2 for 'no': "), nl,
-		readint(Response),
-		do_answer(Rno, Text, Bno, Response).
-
-	eval_reply('y'):-
-		write("I hope you have found this helpful !").
-		eval_reply('n'):-
-		write("I am sorry I can't help you !").
-
-	go(Mygoal):-
-		NOT(rule(_, Mygoal, _, _)), !, nl,
-		write("the washer you have indicated is a(n)", Mygoal, "."), nl,
-		write("Is a washer you would like to have (y/n)?"), nl,
-		readchar(R),
-		eval_reply(R).
-
-	go(Mygoal):-
-		rule(Rno, Mygoal, Ny, Cond),
-		check(Rno, Cond),
-		go(Ny).
-
-	check(Rno, [Bno|Rest]):-
-		yes(Bno), !,
-		check(Rno, Rest).
-		check(_, [Bno|_]):-
-		no(Bno), !, fail.
-
-	check(Rno, [Bno|Rest]):-
-		cond(Bno, Text),
-		inpo(Rno, Bno, Text),
-		check(Rno, Rest).
-		check(_, []).
-
-	do_answer(_, _, _, 0):-
-		exit.
-
-	do_answer(_, _, Bno, 1):-
-		assert(yes(Bno)),
-		write("yes"), nl.
-
-	do_answer(_, _, Bno, 2):-
-		assert(no(Bno)),
-		write("yes"), nl, fail.
-
-	clear:-
-		retract(yes(_)), fail;
-		retract(no(_)), fail;
-		!.
-
+  do_expert_job
+  nondeterm show_menu
+  nondeterm do_consulting
+  nondeterm process(integer)
+  info(category)
+  goes(category)
+  listopt
+  clear
+  eval_reply(char)
+  nondeterm go(category)
+  nondeterm check(number, conditions)
+  inpo(number, number, string)
+  do_answer(number, string, number, number)
+  nondeterm append_new_topic
+  nondeterm append_new_rule
+  
+CLAUSES 
+  do_expert_job:-
+    show_menu, nl,
+    write("Press any key"), 
+    readchar(_), exit.
+  
+  show_menu:-
+    write("->  1 - consultation"), nl,
+    write("->  2 - add new topic"), nl,
+    write("->  3 - add new rule"), nl,
+    write("->  0 - exit"), nl,
+    readint(Choice), process(Choice).
+    
+  process(1):-
+    do_consulting.
+  process(2):-
+    append_new_topic.
+  process(3):-
+    append_new_rule.
+  process(0):-
+    exit.
+    
+  do_consulting:-
+    goes(Mygoal), 
+    go(Mygoal), !.
+  do_consulting:-
+    nl, write("I cant help you").
+  do_consulting.
+  
+  goes(MyGoal):-
+    clear, nl,  
+    write("To start enter 'washer'"), nl,
+    write("If you want to see the washers types, enter '?'"), nl,
+    readln(Mygoal), info(Mygoal), !.
+    
+  info("?"):-
+    !, listopt, nl,
+    exit.
+  info("washer").
+  
+  listopt:-
+    write("Washers types are: "), nl,
+    topic(Washer),
+    write("->",Washer), nl, fail.
+  listopt.
+  
+  inpo(Rno, Bno, Text):-
+    write("Question:- ", Text, "?"),nl,
+    write("\tType 1 for 'yes': "), nl,
+    write("\tType 2 for 'no': "), nl,
+    readint(Response),
+    do_answer(Rno, Text, Bno, Response).
+    
+  eval_reply('y'):-
+    write("I hope you have found this helpful !").
+  eval_reply('n'):-
+    write("I am sorry I can't help you !").
+    
+  go(Mygoal):-
+    NOT(rule(_, Mygoal, _, _)), !, nl,
+    write("the washer you have indicated is a(n)", Mygoal, "."), nl,
+    write("Is a washer you would like to have (y/n)?"), nl,
+    readchar(R),
+    eval_reply(R).
+  go(Mygoal):-
+    rule(Rno, Mygoal, Ny, Cond),
+    check(Rno, Cond),
+    go(Ny).
+  
+  check(Rno, [Bno|Rest]):-
+    yes(Bno), !,
+    check(Rno, Rest).
+  check(_, [Bno|_]):-
+    no(Bno), !, fail.
+  check(Rno, [Bno|Rest]):-
+    cond(Bno, Text), 
+    inpo(Rno, Bno, Text),
+    check(Rno, Rest).
+  check(_, []).
+  
+  do_answer(_, _, _, 0):-
+    exit.
+  do_answer(_, _, Bno, 1):-
+    assert(yes(Bno)),
+    write("yes"), nl.
+  do_answer(_, _, Bno, 2):-
+    assert(no(Bno)),
+    write("yes"), nl, fail.
+  
+  clear:-
+    retract(yes(_)), fail;
+    retract(no(_)), fail;
+    !.
+  append_new_topic:-
+    write("Enter a body of topic: "),
+    readln(Topic), assertz(topic(Topic)),
+    save("base.dba", pravila),
+    show_menu.
+    
+  append_new_rule:-
+    write("Enter a new rule: "), nl,
+    write("Enter a number of a rule(>30): "), readint(Number),
+    write("Enter a type of washer(topic): "), readln(WasherType),
+    write("Enter a name of washer: "), readln(WasherName),
+    write("Enter a three property's of washer(integer numbers from 1 to 15): "),
+    readint(FirstProperty), readint(SecondProperty), readint(ThirdProperty),
+    assertz(rule(Number, WasherType, WasherName, [FirstProperty, SecondProperty, ThirdProperty])),
+    save("base.dba", pravila),
+    show_menu.
+    
 GOAL
-	show_menu.
+  consult("base.dba", pravila),
+  show_menu.
 ```
