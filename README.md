@@ -99,14 +99,14 @@ Visual Prolog предоставляет некоторые инструмент
 
 ```prolog
 clauses
-    fileAccess :-
-        FileName = "file.txt",
-        FileMode = read,
-        file::open(FileName, FileMode, File),
-        % Чтение данных из файла
-        file::read(File, Data),
-        % Ваш код для обработки данных
-        file::close(File).
+  fileAccess :-
+    FileName = "file.txt",
+    FileMode = read,
+    file::open(FileName, FileMode, File),
+    % Чтение данных из файла
+    file::read(File, Data),
+    % Ваш код для обработки данных
+    file::close(File).
 ```
 
 В данном примере `file.txt` - это имя файла, `read` - режим открытия файла для чтения. Вы можете использовать `write` для открытия файла для записи.
@@ -114,22 +114,22 @@ clauses
 
 ```prolog
 clauses
-    writeToFile :-
-        FileName = "output.txt",
-        Data = "Hello, Visual Prolog!",
-        FileMode = write,
-        file::open(FileName, FileMode, File),
-        file::write(File, Data),
-        file::close(File).
+  writeToFile :-
+    FileName = "output.txt",
+    Data = "Hello, Visual Prolog!",
+    FileMode = write,
+    file::open(FileName, FileMode, File),
+    file::write(File, Data),
+    file::close(File).
 ```
 
 - **Проверка существования файла**: Для проверки существования файла в Visual Prolog, используйте предикат `file::fileExists/1`:
 
 ```prolog
 clauses
-    checkFileExistence :-
-        FileName = "file.txt",
-        file::fileExists(FileName).
+  checkFileExistence :-
+    FileName = "file.txt",
+    file::fileExists(FileName).
 ```
 
 Это позволит вам проверить, существует ли файл `file.txt`.
@@ -185,16 +185,13 @@ older(X, Y) :- age(X, A), age(Y, B), A > B.
 
 ``` prolog
 domains 
-	utype=integer
-
+  utype=integer
 predicates
-	sum(utype, utype)
-
+  sum(utype, utype)
 clauses
-	sum(1, 2).
-
+  sum(1, 2).
 goal
-	sum(X, Y).
+  sum(X, Y).
 ```
 
 ```output
@@ -205,7 +202,6 @@ X=1, Y=2
 
 ```prolog
 DOMAINS
-	DOMAINS 
   conditions = number*
   number = integer
   category = string
